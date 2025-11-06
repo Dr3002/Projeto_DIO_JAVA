@@ -5,6 +5,7 @@ Ele permite criar uma conta, consultar saldo e verificar o cheque especial,
 com possibilidade de futuras implementações para depósitos, saques e pagamento de boletos.
 
 ========================================================
+
 📋 Funcionalidades Implementadas
 
 - Criar Conta: permite cadastrar uma conta bancária informando número,
@@ -16,6 +17,7 @@ com possibilidade de futuras implementações para depósitos, saques e pagament
    ainda não estão implementadas, mas já estão reservadas no código.
 
 ========================================================
+
 🧠 Lógica do Sistema
 
 O programa roda em um loop (while) que exibe um menu de opções para o usuário:
@@ -36,6 +38,7 @@ Cada opção aciona um método específico. Por exemplo:
 - ConsultarChequeEsp() → verifica se a conta possui cheque especial e exibe o valor.
 
 ========================================================
+
 ▶️ Como Executar
 
 1. Certifique-se de ter o Java instalado (versão 8 ou superior).
@@ -46,6 +49,7 @@ Cada opção aciona um método específico. Por exemplo:
 4. Interaja com o menu no terminal.
 
 ========================================================
+
 🧑‍💻 Autor
 
 Daniel Ribeiro Alcântara Marques
