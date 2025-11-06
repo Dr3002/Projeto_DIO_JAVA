@@ -27,14 +27,19 @@ public class Main {
               switch (escolha){
                  case 1:
                      conta = CriarConta();
+                     break;
                  case 2:
                      ConsultarSaldo(conta);
+                     break;
                  case 3:
                      ConsultarChequeEsp(conta,TerCheque);
+                     break;
                  case 4:
-                     //DepositarDinheiro();
+                     DepositarDinheiro(conta);
+                     break;
                  case 5:
-                     //SacarDinheiro();
+                     SacarDinheiro(conta);
+                     break;
                  case 6:
                      //PagarBoleto();
                  case 7:
@@ -53,7 +58,9 @@ public class Main {
         String b = sc.next();
 
         if (b.equalsIgnoreCase("SIM")){
-            conta.setCheque_especial(((conta.getSaldo())/10));
+
+            AtualizarChequeEspecial(conta);
+
         }else if (b.equalsIgnoreCase("NÃO")){
             TerCheque = false;
         }else{
@@ -80,7 +87,7 @@ public class Main {
     public static void ConsultarChequeEsp(ContaBanco conta, boolean TerCheque){
 
         if(conta == null){
-            System.out.println("Nenhuma Conta Cadastrada!");
+            System.out.println("Nenhuma Conta Cadastrada!!");
             return;
         } else if (TerCheque == false) {
             System.out.println("Sua conta não possui Cheque Especial");
@@ -91,6 +98,52 @@ public class Main {
 
     }
 
+    public static ContaBanco DepositarDinheiro(ContaBanco conta){
 
+         if(conta == null){
+            System.out.println("Nenhuma Conta Cadastrada!!!");
+            return conta;
+        } else if (conta.getSaldo() <= 0) {
+            System.out.println("Sua conta não possui saldo");
+            return conta;
+        }
+
+        System.out.println("Digite o valor a ser adicionado:");
+        conta.setSaldo((sc.nextDouble())+conta.getSaldo());
+        
+        AtualizarChequeEspecial(conta);
+
+        return conta;
+    }
+
+     public static ContaBanco SacarDinheiro(ContaBanco conta){
+
+         if(conta == null){
+            System.out.println("Nenhuma Conta Cadastrada!!!");
+            return conta;
+        } else if (conta.getSaldo() <= 0) {
+            System.out.println("Sua conta não possui saldo");
+            return conta;
+        }
+
+        System.out.println("Digite o valor a ser sacado:");
+        conta.setSaldo((conta.getSaldo() - sc.nextDouble()));
+
+        AtualizarChequeEspecial(conta);
+
+        return conta;
+    }
+
+    public static ContaBanco AtualizarChequeEspecial(ContaBanco conta){
+
+         if (conta.getSaldo() > 500) {
+                conta.setCheque_especial(((conta.getSaldo())/2));
+                return conta;
+            }else{
+                conta.setCheque_especial(((conta.getSaldo())/10));
+                return conta;
+            }
+
+    }
 
 }
