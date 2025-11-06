@@ -1,4 +1,4 @@
-🏦 Sistema Bancário em Java
+## 🏦 Sistema Bancário em Java
 
 Este projeto é um simulador simples de conta bancária desenvolvido em Java.
 Ele permite criar uma conta, consultar saldo e verificar o cheque especial,
