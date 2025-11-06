@@ -4,6 +4,8 @@ public class Main {
 
     public static Scanner sc = new Scanner(System.in);
     public static boolean TerCheque = true;
+    public static double Taxa = 20.0/100.0;
+    public static double boleto = 0.0;
 
     public static void main(String[] args) {
         ContaBanco conta = null;
@@ -32,7 +34,7 @@ public class Main {
                      ConsultarSaldo(conta);
                      break;
                  case 3:
-                     ConsultarChequeEsp(conta,TerCheque);
+                     ConsultarChequeEsp(conta);
                      break;
                  case 4:
                      DepositarDinheiro(conta);
@@ -41,9 +43,10 @@ public class Main {
                      SacarDinheiro(conta);
                      break;
                  case 6:
-                     //PagarBoleto();
+                     PagarBoleto(conta);
+                     break;
                  case 7:
-                     //VerificarChequeEsp();
+                     VerificarChequeEsp(conta);
              }
           }
     }
@@ -58,8 +61,13 @@ public class Main {
         String b = sc.next();
 
         if (b.equalsIgnoreCase("SIM")){
+            TerCheque = true;
 
-            AtualizarChequeEspecial(conta);
+            if (conta.getSaldo() > 500) {
+                conta.setCheque_especial(conta.getSaldo() / 2);
+            } else {
+                conta.setCheque_especial(conta.getSaldo() / 10);
+            }
 
         }else if (b.equalsIgnoreCase("NÃO")){
             TerCheque = false;
@@ -84,7 +92,7 @@ public class Main {
 
     }
 
-    public static void ConsultarChequeEsp(ContaBanco conta, boolean TerCheque){
+    public static void ConsultarChequeEsp(ContaBanco conta){
 
         if(conta == null){
             System.out.println("Nenhuma Conta Cadastrada!!");
@@ -110,40 +118,87 @@ public class Main {
 
         System.out.println("Digite o valor a ser adicionado:");
         conta.setSaldo((sc.nextDouble())+conta.getSaldo());
-        
-        AtualizarChequeEspecial(conta);
 
         return conta;
     }
 
-     public static ContaBanco SacarDinheiro(ContaBanco conta){
+    public static ContaBanco SacarDinheiro(ContaBanco conta){
 
-         if(conta == null){
+        if (conta == null) {
             System.out.println("Nenhuma Conta Cadastrada!!!");
             return conta;
-        } else if (conta.getSaldo() <= 0) {
-            System.out.println("Sua conta não possui saldo");
-            return conta;
+        }else if(conta.getSaldo() <= 0){
+            System.out.println("Você está usando o cheque especial!");
         }
 
         System.out.println("Digite o valor a ser sacado:");
-        conta.setSaldo((conta.getSaldo() - sc.nextDouble()));
+        double valor = sc.nextDouble();
 
-        AtualizarChequeEspecial(conta);
+        double saldoDisponivel = conta.getSaldo() + conta.getCheque_especial();
+
+        if (valor > saldoDisponivel) {
+            System.out.println("Saldo insuficiente, nem o cheque especial cobre este valor.");
+            return conta;
+        }
+
+        if (conta.getSaldo() <= 0) {
+            conta.setCheque_especial(conta.getCheque_especial() - valor);
+            return conta;
+        }else{
+            conta.setSaldo(conta.getSaldo() - valor);
+        }
 
         return conta;
     }
 
-    public static ContaBanco AtualizarChequeEspecial(ContaBanco conta){
 
-         if (conta.getSaldo() > 500) {
-                conta.setCheque_especial(((conta.getSaldo())/2));
-                return conta;
-            }else{
-                conta.setCheque_especial(((conta.getSaldo())/10));
+    public static ContaBanco PagarBoleto(ContaBanco conta){
+        if (conta == null) {
+        System.out.println("Nenhuma Conta Cadastrada!");
+        return conta;
+        }
+
+        System.out.println("Digite o valor do boleto:");
+        double valorBoleto = sc.nextDouble();
+        double valorTotal = valorBoleto;
+
+        // Verifica se precisa usar o cheque especial
+        if (valorBoleto > conta.getSaldo()) {
+            double falta = valorBoleto - conta.getSaldo();
+
+            if (falta > conta.getCheque_especial()) {
+                System.out.println("Nem o cheque especial cobre o boleto!");
                 return conta;
             }
 
+            // Aplica taxa de 20% sobre o valor usado do cheque especial
+            double juros = falta * Taxa;
+            valorTotal = valorBoleto + juros;
+
+            // Atualiza saldo e cheque especial
+            conta.setSaldo(0);
+            conta.setCheque_especial(conta.getCheque_especial() - falta);
+
+            System.out.println("Usou R$" + falta + " do cheque especial. Taxa: R$" + juros);
+        } else {
+            // Paga com saldo normal
+            conta.setSaldo(conta.getSaldo() - valorBoleto);
+        }
+
+        System.out.println("Boleto pago! Valor total com taxas: R$" + valorTotal);
+        
+        return conta;
+    }
+
+    public static void VerificarChequeEsp(ContaBanco conta){
+        //Verificar se tem cheque especial
+        if(TerCheque == true){
+            System.out.println("Possui Cheque especial!");
+        }else{
+            System.out.println("Não possui Cheque especial!");
+        }
+        
+        return;
     }
 
 }
